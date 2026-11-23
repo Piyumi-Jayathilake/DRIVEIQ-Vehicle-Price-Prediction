@@ -8,6 +8,17 @@ from pathlib import Path
 # ==========================================
 # PAGE CONFIGURATION
 # ==========================================
+
+st.set_page_config(
+    page_title="Vehicle Price Analytics",
+    page_icon="📊",
+    layout="wide"
+)
+
+# ==========================================
+# CUSTOM CSS
+# ==========================================
+
 st.markdown("""
 <style>
 footer {
@@ -18,12 +29,6 @@ footer {
 }
 </style>
 """, unsafe_allow_html=True)
-
-st.set_page_config(
-    page_title="Vehicle Price Analytics",
-    page_icon="📊",
-    layout="wide"
-)
 
 # ==========================================
 # PROJECT PATHS
@@ -39,19 +44,27 @@ MODEL_DIR = BASE_DIR / "models"
 
 @st.cache_data
 def load_data():
-    return pd.read_csv(DATA_DIR / "cleaned_used_cars.csv")
+    data_path = DATA_DIR / "cleaned_used_cars.csv"
+    return pd.read_csv(data_path)
+
 
 @st.cache_resource
 def load_model():
-    return joblib.load(MODEL_DIR / "stacking_pipeline.pkl")
+    model_path = MODEL_DIR / "stacking_pipeline.pkl"
+    return joblib.load(model_path)
+
 
 @st.cache_data
 def load_results():
-    return joblib.load(MODEL_DIR / "model_results.pkl")
+    results_path = MODEL_DIR / "model_results.pkl"
+    return joblib.load(results_path)
+
 
 @st.cache_data
 def load_features():
-    return joblib.load(MODEL_DIR / "feature_information.pkl")
+    features_path = MODEL_DIR / "feature_information.pkl"
+    return joblib.load(features_path)
+
 
 df = load_data()
 model = load_model()
@@ -77,8 +90,9 @@ page = st.sidebar.radio(
 )
 
 st.sidebar.divider()
+
 st.sidebar.info(
-    "224092J"
+    "224092J\n"
     "Jayathilake P. P. P."
 )
 
@@ -89,6 +103,7 @@ st.sidebar.info(
 if page == "Dashboard Overview":
 
     st.title("Vehicle Price Analytics Dashboard")
+
     st.write(
         "Explore the used vehicle market "
         "and understand vehicle price trends."
@@ -121,6 +136,7 @@ if page == "Dashboard Overview":
     left, right = st.columns(2)
 
     with left:
+
         st.subheader("Vehicles by Brand")
 
         brand_counts = (
@@ -139,9 +155,13 @@ if page == "Dashboard Overview":
             title="Top 10 Vehicle Brands"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     with right:
+
         st.subheader("Vehicle Price Distribution")
 
         fig = px.histogram(
@@ -151,10 +171,17 @@ if page == "Dashboard Overview":
             title="Distribution of Vehicle Prices"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     st.subheader("Recent Dataset Records")
-    st.dataframe(df.head(10), use_container_width=True)
+
+    st.dataframe(
+        df.head(10),
+        use_container_width=True
+    )
 
 # ==========================================
 # DATA ANALYSIS
@@ -180,6 +207,7 @@ elif page == "Data Analysis":
     filtered_df = df.copy()
 
     if selected_brand != "All":
+
         filtered_df = filtered_df[
             filtered_df["Brand"] == selected_brand
         ]
@@ -187,6 +215,7 @@ elif page == "Data Analysis":
     col1, col2 = st.columns(2)
 
     with col1:
+
         fig = px.box(
             filtered_df,
             x="Brand",
@@ -194,9 +223,13 @@ elif page == "Data Analysis":
             title="Vehicle Prices by Brand"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     with col2:
+
         fig = px.scatter(
             filtered_df,
             x="Millage(KM)",
@@ -205,11 +238,15 @@ elif page == "Data Analysis":
             title="Mileage vs Vehicle Price"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     col3, col4 = st.columns(2)
 
     with col3:
+
         year_prices = (
             filtered_df.groupby("YOM")["Price"]
             .mean()
@@ -224,22 +261,37 @@ elif page == "Data Analysis":
             title="Average Price by Manufacturing Year"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     with col4:
-        fig = px.bar(
+
+        fuel_prices = (
             filtered_df.groupby("Fuel Type")["Price"]
             .mean()
-            .reset_index(),
+            .reset_index()
+        )
+
+        fig = px.bar(
+            fuel_prices,
             x="Fuel Type",
             y="Price",
             title="Average Price by Fuel Type"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     st.subheader("Filtered Vehicle Records")
-    st.dataframe(filtered_df, use_container_width=True)
+
+    st.dataframe(
+        filtered_df,
+        use_container_width=True
+    )
 
 # ==========================================
 # MODEL PERFORMANCE
@@ -250,13 +302,14 @@ elif page == "Model Performance":
     st.title("Ensemble Model Performance")
 
     st.write(
-        "Comparison of six machine learning models "
+        "Comparison of trained machine learning models "
         "using evaluation metrics."
     )
 
     comparison_df = pd.DataFrame(results).T
 
     comparison_df.index.name = "Model"
+
     comparison_df = comparison_df.reset_index()
 
     st.subheader("Model Comparison")
@@ -270,6 +323,7 @@ elif page == "Model Performance":
     col1, col2 = st.columns(2)
 
     with col1:
+
         fig = px.bar(
             comparison_df,
             x="Model",
@@ -278,9 +332,13 @@ elif page == "Model Performance":
             text_auto=".4f"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     with col2:
+
         fig = px.bar(
             comparison_df,
             x="Model",
@@ -289,7 +347,10 @@ elif page == "Model Performance":
             text_auto=".4f"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
     best_model = comparison_df.loc[
         comparison_df["R2"].idxmax()
@@ -314,7 +375,9 @@ elif page == "Price Prediction":
     )
 
     feature_columns = feature_info["feature_columns"]
+
     categorical_columns = feature_info["categorical_columns"]
+
     numerical_columns = feature_info["numerical_columns"]
 
     with st.form("prediction_form"):
@@ -344,14 +407,14 @@ elif page == "Price Prediction":
                         options
                     )
 
-              
                 else:
 
                     minimum = float(df[feature].min())
+
                     maximum = float(df[feature].max())
+
                     default = float(df[feature].median())
 
-                    # Display Year of Manufacture as an integer
                     if feature == "YOM":
 
                         user_input[feature] = st.number_input(
@@ -371,7 +434,6 @@ elif page == "Price Prediction":
                             max_value=maximum,
                             value=default
                         )
-
 
         submitted = st.form_submit_button(
             "Predict Vehicle Price",
