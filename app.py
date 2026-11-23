@@ -78,8 +78,8 @@ page = st.sidebar.radio(
 
 st.sidebar.divider()
 st.sidebar.info(
-    "Powered by Machine Learning "
-    "and Ensemble Learning"
+    "224092J"
+    "Jayathilake P. P. P."
 )
 
 # ==========================================
