@@ -92,7 +92,7 @@ page = st.sidebar.radio(
 st.sidebar.divider()
 
 st.sidebar.info(
-    "224092J\n"
+    "224092J \n"
     "Jayathilake P. P. P."
 )
 
