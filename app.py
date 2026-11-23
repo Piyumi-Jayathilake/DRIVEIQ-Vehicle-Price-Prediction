@@ -8,6 +8,16 @@ from pathlib import Path
 # ==========================================
 # PAGE CONFIGURATION
 # ==========================================
+st.markdown("""
+<style>
+footer {
+    visibility: hidden;
+}
+[data-testid="stFooter"] {
+    display: none;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.set_page_config(
     page_title="Vehicle Price Analytics",
