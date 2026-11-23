@@ -1,10 +1,10 @@
-# DRIVEIQ – Vehicle Price Prediction
+#  - Vehicle Price Prediction -
 
 A vehicle price prediction and analytics system for Sri Lanka.
 
 ## Project Overview
 
-DRIVEIQ is a machine learning-based system developed to predict vehicle prices and analyse vehicle market data in Sri Lanka.
+This is a machine learning-based system developed to predict vehicle prices and analyse vehicle market data in Sri Lanka.
 
 ## Technologies Used
 - Python
