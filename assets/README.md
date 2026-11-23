@@ -1,1 +1,1 @@
-Dashboard screenshots and visual resources for DRIVEIQ.
+Dashboard screenshots and visual resources.
