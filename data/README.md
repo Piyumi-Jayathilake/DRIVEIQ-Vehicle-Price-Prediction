@@ -1,1 +1,1 @@
-Dataset files used for the DRIVEIQ vehicle price prediction project.
+Dataset files used for the vehicle price prediction project.
